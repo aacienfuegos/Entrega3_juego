@@ -17,6 +17,7 @@ class Game {
         this.opponentShots = []; // Disparos del oponente
         this.xDown = null; //  Posición en la que el usuario ha tocado la pantalla
         this.paused = false; // Indica si el juego está pausado
+        this.score = 0; // Puntuacion
     }
 
     /**
@@ -83,10 +84,11 @@ class Game {
      * Elimina al oponente del juego
      */
     removeOpponent () {
-        if (this.opponent) {
+				if (this.opponent instanceof Boss) this.endGame();
+        else if (this.opponent instanceof Opponent) {
             document.body.removeChild(this.opponent.image);
+				    this.opponent = new Boss(this);
         }
-        this.opponent = new Opponent(this);
     }
 
     /**
@@ -204,7 +206,11 @@ class Game {
      */
     endGame () {
         this.ended = true;
-        let gameOver = new Entity(this, this.width / 2, "auto", this.width / 4, this.height / 4, 0, GAME_OVER_PICTURE)
+				var picture = GAME_OVER_PICTURE;
+				if (this.player.lives > 0) picture = YOU_WIN_PICTURE; 
+
+
+        let gameOver = new Entity(this, this.width / 2, "auto", this.width / 4, this.height / 4, 0, picture)
         gameOver.render();
     }
 

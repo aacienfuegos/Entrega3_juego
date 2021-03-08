@@ -15,8 +15,10 @@ class Player extends Character {
             speed = PLAYER_SPEED,
             myImageSrc = PLAYER_PICTURE,
             myImageDeadSrc = PLAYER_PICTURE_DEAD;
+        
 
         super(game, width, height, x, y, speed, myImageSrc, myImageDeadSrc);
+        this.lives = LIVES_INI; 
     }
 
     /**
@@ -47,10 +49,20 @@ class Player extends Character {
      */
     collide() {
         if (!this.dead) {
-            setTimeout(() => {
-                this.game.endGame();
-            }, 2000);
-            super.collide();
+            this.lives--;     
+            document.getElementById("livesli").innerHTML = "Lives: " + this.lives;""
+            if(this.lives > 0){
+                setTimeout(() => {
+                    this.image.src = this.myImageSrc;
+                    this.dead = false;
+                }, 2000);
+                super.collide();
+            } else {
+                setTimeout(() => {
+                    this.game.endGame();
+                }, 2000);
+                super.collide();
+            }
         }
     }
 }
